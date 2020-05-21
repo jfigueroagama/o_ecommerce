@@ -1,18 +1,33 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  root to: "products#index"
+  root to: "api/v1/products#index"
 
-  resources :products do
-    resources :comments, only: [:create]
+ # We comment the server side routes
+ # resources :products do
+ #   resources :comments, only: [:create]
+ # end
+
+ # get 'users/new', to: "users#new", as: "new_user"
+ # get '/signup', to: "users#new"
+ # get '/signin', to: "sessions#new"
+ # post '/signin', to: "sessions#create"
+ # delete '/signout', to: "sessions#destroy", as: "session"
+
+ # resources :users, only: [:create]
+
+  # React routes
+  namespace :api do
+    namespace :v1 do
+      resources :products do
+        resources :comments, only: [:create]
+      end
+      resources :users, only: [:create]
+      post '/signin', to: "sessions#create"
+      delete '/signout', to: "sessions#destroy", as: "session"
+    end
   end
 
-  get 'users/new', to: "users#new", as: "new_user"
-  get '/signup', to: "users#new"
-  get '/signin', to: "sessions#new"
-  post '/signin', to: "sessions#create"
-  delete '/signout', to: "sessions#destroy", as: "session"
-
-  resources :users, only: [:create]
+  get '*path', to: 'api/v1/products#index'
 
   # The get reqquest to the index action
   #get "/products", to: "products#index"
